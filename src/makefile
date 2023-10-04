@@ -1,1 +1,1 @@
-obj	+=
+objs	+= main.o log.o
