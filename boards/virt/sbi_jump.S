@@ -6,6 +6,14 @@ _start:
 	csrr		t0,		mhartid
 	bnez		t0,		.halt
 	la		sp,		.stack
+
+	la		t0,		__bss_start
+	la		t1,		__bss_end
+.clear:
+	sd		zero,		0(t0)
+	addi		t0,		t0,		8
+	bne		t0,		t1,		.clear
+
 	j		entry
 
 	/*
