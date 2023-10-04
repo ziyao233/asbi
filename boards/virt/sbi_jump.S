@@ -25,10 +25,15 @@ _start:
 	j		.halt
 
 fw_info:
+	addi		sp,		sp,		-8
+	sd		ra,		0(sp)
 	la		a0,		fwInfo
 	call		log
 	li		a0,		O_JUMP_ADDR
 	call		log_numhex
+	call		log_newline
+	ld		ra,		0(sp)
+	addi		sp,		sp,		8
 	ret
 fwInfo:	.asciz		"JUMP firmware, target address "
 

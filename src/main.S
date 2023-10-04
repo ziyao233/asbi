@@ -7,14 +7,26 @@
 
  	.global		entry
 
+	.macro		dolog	log
+
+	la		a0,		\log
+	call		log
+
+	.endm
+
 	.text
 entry:
 	call		log_init
-	la		a0,		asbiHelloLog
-	call		log
+	dolog		asbiHelloLog
 
 	call		fw_info
 
+	dolog		setupPMA
+	csrw		pmpcfg0,		0x0f
+	li		t0,			0x3fffffffffffff
+	csrw		pmpaddr0,		t0
+
+	dolog		sbiWorkDone
 .spin:
 	wfi
 	j		.spin
@@ -22,3 +34,7 @@ entry:
 	.data
 asbiHelloLog:
 	.asciz		"asbi built on " __DATE__ " at " __TIME__ "\n"
+setupPMA:
+	.asciz		"Setting up PMA entries\n"
+sbiWorkDone:
+	.asciz		"Done. Jumping to next-level bootloader\n"
