@@ -13,6 +13,8 @@ entry:
 	la		a0,		asbiHelloLog
 	call		log
 
+	call		fw_info
+
 .spin:
 	wfi
 	j		.spin

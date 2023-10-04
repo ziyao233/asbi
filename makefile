@@ -17,8 +17,12 @@ OBJCOPY		:= $(CROSS_COMPILE)objcopy
 BOARD		?= virt
 BOARDP		= boards/$(BOARD)
 
+O_JUMP_ADDR	?= 0x80200000
+OPTIONS		:= -DO_JUMP_ADDR=$(O_JUMP_ADDR)
+
 CCASFLAGS	:= $(ALFLAGS_DEBUG) -mcmodel=medany -march=rv64gc	\
-		   -mabi=lp64d -g -nostdlib -nostdinc -I$(BOARDP)
+		   -mabi=lp64d -g -nostdlib -nostdinc -I$(BOARDP)	\
+		   $(OPTIONS)
 LDFLAGS		:= -T $(BOARDP)/link.ld
 
 SBI_BASE	:=
@@ -34,7 +38,6 @@ SBI_JUMP_O	:= $(BOARDP)/sbi_jump.o
 SBI_JUMP	:= asbi-jump.elf
 SBI_JUMP_BIN	:= asbi-jump.bin
 
-O_JUMP_ADDR	?= 0x80200000
 
 default: build
 
