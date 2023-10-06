@@ -26,6 +26,9 @@ entry:
 	li		t0,			0x3fffffffffffff
 	csrw		pmpaddr0,		t0
 
+	dolog		setupException
+	call		exception_init
+
 	dolog		sbiWorkDone
 .spin:
 	wfi
@@ -36,5 +39,7 @@ asbiHelloLog:
 	.asciz		"asbi built on " __DATE__ " at " __TIME__ "\n"
 setupPMA:
 	.asciz		"Setting up PMA entries\n"
+setupException:
+	.asciz		"Setting up interrupt handler\n"
 sbiWorkDone:
 	.asciz		"Done. Jumping to next-level bootloader\n"

@@ -1,5 +1,6 @@
 	.global		_start
 	.global		fw_info
+	.global		.stack
 
 	.section	.text.start
 _start:
@@ -38,5 +39,5 @@ fw_info:
 fwInfo:	.asciz		"JUMP firmware, target address "
 
 	.bss
-.stack:
 	.skip		4096
+.stack:
