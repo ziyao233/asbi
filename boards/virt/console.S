@@ -8,13 +8,14 @@
 #include<board/uart.h>
 	.global		board_console_init
 	.global		board_console_putchar_sync
+	.global		board_console_getchar_async
 
 	.text
 /*
  *	Initialise UART0 (16550 UART)
  */
 board_console_init:
-	la		t0,		BOARD_UART0_BASE
+	li		t0,		BOARD_UART0_BASE
 
 	/*	Disable	interrupt	*/
 	sb		zero,		BOARD_UART0_IER(t0)
@@ -34,10 +35,6 @@ board_console_init:
 	li		t1,		0x07		// Enable and clear
 	sb		t1,		BOARD_UART0_FCR(t0)
 
-	/*	Enable	interrupts	*/
-	li		t1,		0x03
-	sb		t1,		BOARD_UART0_IER(t0)
-
 	ret
 
 /*
@@ -45,11 +42,26 @@ board_console_init:
  *	a0:	Character
  */
 board_console_putchar_sync:
-	la		t0,		BOARD_UART0_BASE
+	li		t0,		BOARD_UART0_BASE
 .wait:
 	lb		t1,		BOARD_UART0_LSR(t0)
 	andi		t1,		t1,		BOARD_UART0_LSR_TX_IDLE
 	beqz		t1,		.wait
 
 	sb		a0,		BOARD_UART0_THR(t0)
+	ret
+
+/*
+ *	Read a character from the UART
+ *	a0:	Character, bit 8 is set when nothing to read.
+ */
+board_console_getchar_async:
+	la		t0,		BOARD_UART0_BASE
+	lb		t1,		BOARD_UART0_LSR(t0)
+	andi		t1,		t1,		BOARD_UART0_LSR_RX_READY
+	beqz		t1,		.noByte
+	lb		a0,		BOARD_UART0_RBR(t0)
+	ret
+.noByte:
+	li		a0,		0x100
 	ret

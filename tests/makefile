@@ -9,7 +9,7 @@ CC		:= $(CROSS_COMPILE)gcc
 LD		:= $(CROSS_COMPILE)ld
 
 CFLAGS		:= -march=rv64gc -mabi=lp64d -g -O0 -pedantic -Wextra	\
-		   -nostdinc -nostdlib -mcmodel=medany
+		   -nostdinc -nostdlib -mcmodel=medany -Wall -std=gnu99
 CCASFLAGS	:= $(CFLAGS)
 LDFLAGS		:= -T link.ld
 
