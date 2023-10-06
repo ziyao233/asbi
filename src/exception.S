@@ -30,9 +30,13 @@ exception_init:
 	ret
 
 do_ecall:
-	la		a0,		.ecallMsg
-	call		log
-	j		ret_from_exception
+	la		s11,		ret_from_ecall
+	li		t0,		0x4442434e
+	beq		t0,		a7,		do_sbi_console
+	j		ret_from_ecall
+
+do_sbi_console:
+	j		sbi_console
 
 	.align		4
 exception_handler:
@@ -89,6 +93,9 @@ b_do_ecall:
 	jalr		t0
 
 ret_from_exception:
+	ld		a0,		64(sp)
+	ld		a1,		72(sp)
+ret_from_ecall:
 	ld		t0,		240(sp)
 	addi		t0,		t0,		4
 	csrw		mepc,		t0
@@ -100,8 +107,6 @@ ret_from_exception:
 	ld		t2,		40(sp)
 	ld		s0,		48(sp)
 	ld		s1,		56(sp)
-	ld		a0,		64(sp)
-	ld		a1,		72(sp)
 	ld		a2,		80(sp)
 	ld		a3,		88(sp)
 	ld		a4,		96(sp)
@@ -128,7 +133,5 @@ ret_from_exception:
 	mret
 
 	.data
-.ecallMsg:
-	.asciz		"ecall\n"
 .unhandledMsg:
 	.asciz		"Unhandled exception, mcause="

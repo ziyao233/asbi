@@ -22,7 +22,7 @@ OPTIONS		:= -DO_JUMP_ADDR=$(O_JUMP_ADDR)
 
 CCASFLAGS	:= $(ALFLAGS_DEBUG) -mcmodel=medany -march=rv64gc	\
 		   -mabi=lp64d -g -nostdlib -nostdinc -I$(BOARDP)	\
-		   $(OPTIONS)
+		   -Iinclude $(OPTIONS)
 LDFLAGS		:= -T $(BOARDP)/link.ld
 
 SBI_BASE	:=

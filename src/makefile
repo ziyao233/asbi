@@ -1,1 +1,1 @@
-objs	+= main.o log.o exception.o
+objs	+= main.o log.o exception.o console.o
