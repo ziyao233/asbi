@@ -8,6 +8,7 @@
 #ifndef __TESTS_H_INC__
 #define __TESTS_H_INC__
 
+void test_base(void);
 void test_console(void);
 
 #endif	// __TESTS_H_INC__

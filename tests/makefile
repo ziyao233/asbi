@@ -13,7 +13,8 @@ CFLAGS		:= -march=rv64gc -mabi=lp64d -g -O0 -pedantic -Wextra	\
 CCASFLAGS	:= $(CFLAGS)
 LDFLAGS		:= -T link.ld
 
-OBJS		:= start.o main.o sbi.o test_console.o
+OBJS		:= start.o main.o sbi.o printf.o	\
+		   test_console.o test_base.o
 
 default: test.elf
 

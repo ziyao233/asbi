@@ -18,6 +18,7 @@ _putchar(int c)
 int
 main(void)
 {
+	test_base();
 	test_console();
 	while (1) {
 		asm volatile("wfi");
