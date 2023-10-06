@@ -14,6 +14,8 @@ sbi_console:
 	beq		t0,		a6,		write_byte
 	li		t0,		1	// SBI_DEBUG_CONSOLE_READ
 	beq		t0,		a6,		read_bytes
+						// SBI_DEBUG_CONSOLE_WRITE
+	beqz		a6,		write_bytes
 	li		a0,		SBI_ERR_NOT_SUPPORTED
 	jalr		s11
 
@@ -21,6 +23,22 @@ write_byte:
 	call		board_console_putchar_sync
 	mv		a0,		zero
 	mv		a1,		zero
+	jalr		s11
+
+write_bytes:
+	mv		s0,		a0
+	mv		s1,		a1
+	mv		s2,		a0
+.doWrite:
+	beqz		s0,		.doneWrite
+	lb		a0,		0(s1)
+	call		board_console_putchar_sync
+	addi		s0,		s0,		-1
+	addi		s1,		s1,		1
+	j		.doWrite
+.doneWrite:
+	mv		a0,		zero
+	mv		a1,		s2
 	jalr		s11
 
 read_bytes:
