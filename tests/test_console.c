@@ -5,8 +5,11 @@
  *	Copyright (c) 2023 Yao Zi. All rights reserved.
  */
 
+#include<stddef.h>
+
 #include"tests.h"
 #include"sbi.h"
+#include"tools.h"
 
 static void
 test_write_byte(void)
@@ -17,11 +20,25 @@ test_write_byte(void)
 	return;
 }
 
+static void
+test_write_bytes(void)
+{
+	const char *msg = "I can eat glass. It doesn't hurt me.\n";
+	size_t len = strlen(msg);
+	for (unsigned int i = 0; i < len;) {
+		Sbi_Return ret = sbi_call3(0x4442434e, 0,
+					   len - i, msg + i, 0);
+		i += ret.value;
+	}
+	return;
+}
+
 void
 test_console(void)
 {
 	if (!sbi_probe(0x4442434e))
 		return;
 	test_write_byte();
+	test_write_bytes();
 	return;
 }
