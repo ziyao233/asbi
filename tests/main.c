@@ -6,6 +6,7 @@
  */
 
 #include"sbi.h"
+#include"tests.h"
 
 void
 _putchar(int c)
@@ -17,18 +18,7 @@ _putchar(int c)
 int
 main(void)
 {
-	char t[16];
-	for (int i = 0; i < 5;) {
-		Sbi_Return ret = sbi_call3(0x4442434e, 1, 15 - i, t + i, 0);
-		i += ret.value;
-	}
-	for (int i = 0; i < 5; i++)
-		_putchar(t[i]);
-
-	const char *msg = "The quick brown fox jumps over the lazy dog.\n";
-	for (const char *p = msg; *p; p++)
-		_putchar(*p);
-
+	test_console();
 	while (1) {
 		asm volatile("wfi");
 	}
