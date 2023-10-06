@@ -12,6 +12,8 @@
 	.global		sbi_base_extension
 
 sbi_base_extension:
+	li		t0,		3
+	beq		t0,		a6,		sbi_probe_extension
 	mv		a0,		zero
 	beqz		a6,		sbi_spec_ver
 	li		t0,		1
@@ -45,3 +47,34 @@ m_arch_id:
 m_impl_id:
 	csrr		a1,		mimpid
 	jalr		s11
+
+	/*	Byte 1 + Byte 2 and use the least 6bits as index	*/
+sbi_probe_extension:
+	srli		t0,		a0,		8
+	andi		t0,		t0,		0xff
+	srli		t1,		a0,		16
+	andi		t1,		t1,		0xff
+	add		t0,		t0,		t1
+
+	andi		t0,		t0,		0x3f
+	slli		t0,		t0,		2
+
+	la		t1,		extFilter
+	add		t0,		t0,		t1
+	lw		t0,		0(t0)
+
+	beq		t0,		a0,		.supported
+	mv		a1,		zero
+	j		.endProbe
+.supported:
+	li		a1,		1
+.endProbe:
+	mv		a0,		zero
+	jalr		s11
+
+	.align		4
+extFilter:
+	.long		0x10			// Base Extension, 0
+	.skip		4 * 4
+	.long		0x4442434e		// Debug Console Extension, 0x05
+	.skip		4 * 58
