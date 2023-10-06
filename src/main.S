@@ -22,17 +22,24 @@ entry:
 	call		fw_info
 
 	dolog		setupPMA
-	csrw		pmpcfg0,		0x0f
-	li		t0,			0x3fffffffffffff
-	csrw		pmpaddr0,		t0
+	csrw		pmpcfg0,	0x0f
+	li		t0,		0x3fffffffffffff
+	csrw		pmpaddr0,	t0
 
 	dolog		setupException
 	call		exception_init
 
 	dolog		sbiWorkDone
-.spin:
-	wfi
-	j		.spin
+
+	csrr		t0,		mstatus
+	li		t1,		~(3 << 11)
+	and		t0,		t0,		t1
+	li		t1,		1 << 11
+	or		t0,		t0,		t1
+	csrw		mstatus,	t0
+	li		t0,		O_JUMP_ADDR
+	csrw		mepc,		t0
+	mret
 
 	.data
 asbiHelloLog:

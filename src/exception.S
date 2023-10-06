@@ -30,11 +30,11 @@ exception_init:
 	ret
 
 do_ecall:
-	la		a0,		.msg
+	la		a0,		.ecallMsg
 	call		log
 	j		ret_from_exception
-.msg:	.asciz		"ecall\n"
 
+	.align		4
 exception_handler:
 	csrrw		sp,		mscratch,	sp
 	addi		sp,		sp,		-256
@@ -72,12 +72,15 @@ exception_handler:
 	sd		t0,		240(sp)
 
 	csrr		t0,		mcause
-	li		t1,		0x8
+	li		t1,		0x9
 	beq		t0,		t1,		b_do_ecall
 
 b_unhandled:
 	la		a0,		.unhandledMsg
 	call		log
+	csrr		a0,		mcause
+	call		log_numhex
+	call		log_newline
 .loop:
 	wfi
 	j		.loop
@@ -85,12 +88,9 @@ b_do_ecall:
 	la		t0,		do_ecall
 	jalr		t0
 
-
-.unhandledMsg:
-	.asciz		"Unhandled exception\n"
-
 ret_from_exception:
 	ld		t0,		240(sp)
+	addi		t0,		t0,		4
 	csrw		mepc,		t0
 	ld		ra,		0(sp)
 	ld		gp,		8(sp)
@@ -126,3 +126,9 @@ ret_from_exception:
 	csrrw		sp,		mscratch,	sp
 
 	mret
+
+	.data
+.ecallMsg:
+	.asciz		"ecall\n"
+.unhandledMsg:
+	.asciz		"Unhandled exception, mcause="

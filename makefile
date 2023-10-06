@@ -38,10 +38,11 @@ SBI_JUMP_O	:= $(BOARDP)/sbi_jump.o
 SBI_JUMP	:= asbi-jump.elf
 SBI_JUMP_BIN	:= asbi-jump.bin
 
-
 default: build
 
-build: $(SBI_JUMP)
+build: $(SBI_JUMP_BIN)
+
+$(SBI_JUMP_BIN): $(SBI_JUMP)
 	$(OBJCOPY) -j .text -j .data -O binary $(SBI_JUMP) $(SBI_JUMP_BIN)
 
 $(SBI_JUMP): $(SBI_BASE) $(SBI_JUMP_O)
@@ -55,3 +56,15 @@ distclean: clean
 
 %.o: %.S
 	$(CCAS) $< -c $(CCASFLAGS) -o $@
+
+test: build buildtest
+	qemu-system-riscv64 -machine virt -nographic			\
+			    -bios $(SBI_JUMP_BIN) -kernel tests/test.elf
+
+debug: build buildtest
+	qemu-system-riscv64 -machine virt -nographic			\
+			    -bios $(SBI_JUMP_BIN) -kernel tests/test.elf\
+			    -S -s
+
+buildtest:
+	$(MAKE) -C tests
