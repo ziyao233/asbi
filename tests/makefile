@@ -9,11 +9,11 @@ CC		:= $(CROSS_COMPILE)gcc
 LD		:= $(CROSS_COMPILE)ld
 
 CFLAGS		:= -march=rv64gc -mabi=lp64d -g -O0 -pedantic -Wextra	\
-		   -nostdinc -nostdlib
+		   -nostdinc -nostdlib -mcmodel=medany
 CCASFLAGS	:= $(CFLAGS)
 LDFLAGS		:= -T link.ld
 
-OBJS		:= start.o
+OBJS		:= start.o main.o sbi.o
 
 default: test.elf
 
@@ -28,3 +28,7 @@ clean:
 
 distclean: clean
 	-rm test.elf
+
+test: test.elf
+	qemu-system-riscv64 -kernel test.elf -machine virt	\
+			    -nographic
