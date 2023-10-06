@@ -32,3 +32,7 @@ distclean: clean
 test: test.elf
 	qemu-system-riscv64 -kernel test.elf -machine virt	\
 			    -nographic
+
+debug: test.elf
+	qemu-system-riscv64 -kernel test.elf -machine virt	\
+			    -nographic -S -s

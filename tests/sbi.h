@@ -22,6 +22,6 @@ Sbi_Return sbi_call(long int foo, ...);
 #define sbi_call2(eid, fid, a0, a1) \
 	sbi_call((long int)(a0), a1, 0, 0, 0, 0, fid, eid)
 #define sbi_call3(eid, fid, a0, a1, a2) \
-	sbi_call((long int)a0, a1, a2, 0, 0, 0, fid, eid)
+	sbi_call((long int)(a0), (a1), (a2), 0, 0, 0, fid, eid)
 
 #endif	// __SBI_H_INC__
