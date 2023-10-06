@@ -1,0 +1,59 @@
+--------------------------------------------------------------------------------
+
+		asbi:	A RISC-V SBI implementation in Assembly
+
+--------------------------------------------------------------------------------
+
+= Introduction
+
+asbi is a combination of ASsembly and SBI. This is a RISC-V SBI implementation
+written in pure assembly.
+
+= Build
+
+Here are needed tools:
+
+ o Make
+ o GCC/Clang (we need cpp to handle comments, some macros and headers)
+ o objcopy (used to generate binary firmware)
+
+Simply invoke make will give you the binary firmware (asbi-jump.bin)
+
+For cross-compilation, set CROSS_COMPILE as the prefix of your toolchain when
+invoking make. For example,
+
+	make CROSS_COMPILE=riscv64-unknown-linux-musl-
+
+= Next-level Bootloader
+
+Currently asbi is neither able to load next-level bootloader/firmware nor
+be packed with it together. An option, O_JUMP_ADDR, could be set during
+compilation to make asbi jump to the specified address after initializing
+itself.
+
+	make O_JUMP_ADDR=0x80200000
+
+asbi will jump to 0x80200000 by default.
+
+= Test
+
+A testing-purpose kernel is included (in /tests) and could be run both on
+OpenSBI and asbi.
+
+== Run with OpenSBI:
+
+Change to directory tests and run
+
+	make test
+
+== Run with asbi:
+
+In the root directory of the repository, run
+
+	make test
+
+= License and Copyright
+
+asbi is distributed under MIT License.
+
+Copyright (c) 2023 Yao Zi <ziyao@disroot.org>. All rights reserved.
