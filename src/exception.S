@@ -33,10 +33,14 @@ do_ecall:
 	la		s11,		ret_from_ecall
 	li		t0,		0x4442434e
 	beq		t0,		a7,		do_sbi_console
+	li		t0,		0x10
+	beq		t0,		a7,		do_sbi_base
 	j		ret_from_ecall
 
 do_sbi_console:
 	j		sbi_console
+do_sbi_base:
+	j		sbi_base_extension
 
 	.align		4
 exception_handler:

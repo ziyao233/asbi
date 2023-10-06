@@ -14,7 +14,6 @@
 void
 test_base(void)
 {
-	printf("%lu\n", 0);
 	item("SBI Specification Version", 0);
 	item("SBI Implementation ID\t", 1);
 	item("SBI Implementation Version", 2);

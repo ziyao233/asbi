@@ -49,4 +49,4 @@ setupPMA:
 setupException:
 	.asciz		"Setting up interrupt handler\n"
 sbiWorkDone:
-	.asciz		"Done. Jumping to next-level bootloader\n"
+	.asciz		"Done. Jumping to next-level bootloader/firmware\n"
