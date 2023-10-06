@@ -8,6 +8,7 @@
 #ifndef __TESTS_H_INC__
 #define __TESTS_H_INC__
 
+int sbi_probe(long int eid);
 void test_base(void);
 void test_console(void);
 

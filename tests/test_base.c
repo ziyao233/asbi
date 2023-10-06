@@ -14,6 +14,10 @@
 void
 test_base(void)
 {
+	if (!sbi_probe(0x10)) {
+		printf("WARNING: base extension is not supported\n");
+		return;
+	}
 	item("SBI Specification Version", 0);
 	item("SBI Implementation ID\t", 1);
 	item("SBI Implementation Version", 2);

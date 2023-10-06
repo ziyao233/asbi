@@ -20,6 +20,8 @@ test_write_byte(void)
 void
 test_console(void)
 {
+	if (!sbi_probe(0x4442434e))
+		return;
 	test_write_byte();
 	return;
 }
