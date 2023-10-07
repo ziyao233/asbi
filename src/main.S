@@ -16,6 +16,9 @@
 
 	.text
 entry:
+	la		t0,		fdtAddr
+	sd		a1,		0(t0)
+
 	call		log_init
 	dolog		asbiHelloLog
 
@@ -39,6 +42,11 @@ entry:
 	csrw		mstatus,	t0
 	li		t0,		O_JUMP_ADDR
 	csrw		mepc,		t0
+
+	csrr		a0,		mhartid
+	la		t0,		fdtAddr
+	ld		a1,		0(t0)
+
 	mret
 
 	.data
@@ -50,3 +58,5 @@ setupException:
 	.asciz		"Setting up interrupt handler\n"
 sbiWorkDone:
 	.asciz		"Done. Jumping to next-level bootloader/firmware\n"
+fdtAddr:
+	.quad		0
